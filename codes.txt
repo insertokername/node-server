@@ -1,0 +1,35 @@
+user = end user interfacing with the site
+server = node server
+client = bangladesh
+
+types:
+    command
+    info
+
+from:
+    entity who sent it (client or user or server)
+
+to:
+    entity supposed to recieve it(client or user or server)
+
+commands:
+    serverside:
+    register-user: user->server, confirmation server->all user
+        -will store the socket on the serverside as a user type socket
+    register-client: client->server, confirmation server->all user
+        -will store the socket on the serverside as a client type socket
+
+    clientside:
+    move-to: user->client, confirmation client->all user 
+        -moves client mouse to x,y cords with pyautogui
+        -attrs: x,y
+
+    log: client->user
+        -args: text- the text of the log
+
+    photo: client->user
+        -args: text- base 64 version of image as string
+
+    click: user->client, confirmation client-> all user
+        -clicks client mouse with pyautogui
+    screenshot: user->client, confirmation client-> all user
