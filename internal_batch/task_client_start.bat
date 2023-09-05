@@ -6,7 +6,7 @@ rem Change the working directory to the batch file's directory
 pushd "%batch_dir%"\..\client
 
 rem Run the Python script
-python "client.py"
+start "python-afk-client" python "client.py"
 
 rem Restore the original working directory
 popd
