@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebSocket Button Example</title>
+</head>
+
+<body>
+    <!--form >
+        <label for="pwd">pwd:</label>
+        <input type="password" id="pwd" name="pwd"><br><br>
+    </form--> 
+    
+    <!---<img src="data:image/jpeg;base64,"/>-->
+
+    <input type="password" id="passwordInput" placeholder="Enter password">
+    <button onclick="socket.send(make_json_message('server', passwordInput.value, 'register-user'))">log in</button>
+    <br>
+    
+    <button id="updateButton">Trigger Update</button>
+    <p>Move mouse to:</p>
+    <input type="text" placeholder="x" id="moveToX">
+    <input type="text" placeholder="y" id="moveToY">
+    <button onclick="socket.send( JSON.stringify({
+                from: 'user',
+                to: 'client',
+                password: passwordInput.value,
+                command: 'move-to',
+                x:document.getElementById('moveToX').value,
+                y:document.getElementById('moveToY').value
+            }) )"">confirm</button>
+    <button onclick="socket.send(make_json_message('client', passwordInput.value, 'screenshot'))">screenshot</button>
+    <div id="serverOutDiv"> ~~~~~~~~~~~~~~~~~~~~~~~~<br>^messages recieved from server^</div>
+    <img id="imageOut" src=""/>
+    <script>
+        function make_json_message(to, password, command){
+            return JSON.stringify({
+                from: "user",
+                to: to,
+                password: password,
+                command: command
+            });
+        }
+
+        const passwordInput = document.getElementById('passwordInput');
+        const updateButton = document.getElementById('updateButton');
+        const serverOutDiv = document.getElementById('serverOutDiv');
+        const photoOutImg = document.getElementById('imageOut')
+
+        var socket = new WebSocket('ws://192.168.100.2:8080');
+
+        socket.addEventListener('open', (event) => {
+            console.log('Connected to WebSocket');
+            //socket.send(make_json_message("server", passwordInput.value, "register-user"));
+        });
+
+        socket.onmessage = (event) => {
+            console.log("recieved message from server!");
+
+            console.log(event)
+            let message = JSON.parse(event.data)
+            if(message.command=="log"){
+                serverOutDiv.innerHTML = 'server: ' + JSON.parse(event.data).text + '<br>' + serverOutDiv.innerHTML;    
+            }
+            else if(message.command="photo"){
+                photoOutImg.setAttribute("src",'data:image/jpeg;base64,'+message.text);
+            }
+        };
+
+        updateButton.addEventListener('click', () => {
+                socket.send(make_json_message("client",passwordInput.value, ""));
+        });
+        
+    </script>
+    <br>
+
+</body>
+
+</html>
