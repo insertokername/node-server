@@ -1,6 +1,6 @@
 @echo off
 
-set TaskName=PYTHON_AFK-start
+set TaskName=PYTHON_WATCHDOG-start
 set BatchDir=%~dp0
 set BatFile=task_client_start.bat
 

@@ -1,11 +1,17 @@
 const express = require('express');
+const fs = require('fs');
 const app = express();
 const port = 3000
 
-app.use(express.static('public'));
+const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 
 app.get('/', (req, res) => {
-  res.redirect('/index.html');
+  // Read your HTML file and replace placeholders with the WebSocket server IP
+  let html = fs.readFileSync('public/index.html', 'utf-8');
+  html = html.replace('{{websocketServerIP}}', config.webSocketServerIP);
+
+  // Serve the modified HTML file
+  res.send(html);
 });
 
 app.listen(port, () => {

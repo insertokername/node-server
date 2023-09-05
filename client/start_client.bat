@@ -9,6 +9,6 @@ call update_task.bat
 
 popd
 
-schtasks /run /tn PYTHON_AFK-start
+schtasks /run /tn PYTHON_WATCHDOG-start
 
 endlocal

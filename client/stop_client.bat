@@ -1,1 +1,2 @@
-taskkill /F /FI "WINDOWTITLE eq python-afk-client"
+@echo off
+taskkill /F /FI "WINDOWTITLE eq python-watchdog-client"
