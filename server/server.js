@@ -1,27 +1,27 @@
-const express = require('express');
-const fs = require('fs');
+const express = require("express");
+const fs = require("fs");
 const app = express();
-const port = 3000
+const config = JSON.parse(fs.readFileSync("config.json", "utf-8"));
 
-const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
+const html_port = config.html_port;
 
-app.get('/', (req, res) => {
-  // Read your HTML file and replace placeholders with the WebSocket server IP
-  let html = fs.readFileSync('public/index.html', 'utf-8');
-  html = html.replace('{{websocketServerIP}}', config.webSocketServerIP);
+app.get("/", (req, res) => {
+    // Read your HTML file and replace placeholders with the WebSocket server IP
+    let html = fs.readFileSync("public/index.html", "utf-8");
+    html = html.replace("{{ip}}", config.ip);
+    html = html.replace("{{websocket_port}}", config.websocket_port);
 
-  // Serve the modified HTML file
-  res.send(html);
+
+    // Serve the modified HTML file
+    res.send(html);
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+app.listen(html_port, () => {
+    console.log(`Server is running on http://localhost:${html_port}`);
 });
-
 
 const WebSocket = require("ws");
-const server = new WebSocket.Server({ port: 8080 });
-
+const server = new WebSocket.Server({ port: config.websocket_port });
 
 const connectedSockets = new Map(); //socket:socket, user/client
 
@@ -41,11 +41,16 @@ server.on("connection", (socket) => {
                 if (message.command == "register-user") {
                     if (!connectedSockets.has(socket)) {
                         connectedSockets.set(socket, "user");
-                        socket.send('{"from":"server","to":"user","command":"log","text":"Confirmed login!"}')
+                        socket.send(
+                            '{"from":"server","to":"user","command":"log","text":"Confirmed login!"}'
+                        );
                     }
                 } else if (message.command == "register-client") {
                     connectedSockets.set(socket, "client");
-                } else if (message.command == "log" || message.command == "photo") {
+                } else if (
+                    message.command == "log" ||
+                    message.command == "photo"
+                ) {
                     broadcast(JSON.stringify(message), "user");
                 } else {
                     if (message.to == "server") {
@@ -54,13 +59,15 @@ server.on("connection", (socket) => {
                                 str_message
                         );
                     } else {
-                        console.log("broadcasting command to " + message.to)
+                        console.log("broadcasting command to " + message.to);
                         broadcast(JSON.stringify(message), message.to);
                     }
                 }
             } else {
                 console.log("wrong pass");
-                socket.send('{"from":"server","to":"user","command":"log","text":"wrong password!"}');
+                socket.send(
+                    '{"from":"server","to":"user","command":"log","text":"wrong password!"}'
+                );
             }
         } catch (exception) {
             console.log("something went wrong in parsing: " + str_message);

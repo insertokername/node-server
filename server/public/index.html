@@ -47,7 +47,7 @@
         const serverOutDiv = document.getElementById('serverOutDiv');
         const photoOutImg = document.getElementById('imageOut')
 
-        var socket = new WebSocket('{{websocketServerIP}}');
+        var socket = new WebSocket('ws://{{ip}}:{{websocket_port}}');
 
         socket.addEventListener('open', (event) => {
             console.log('Connected to WebSocket');
