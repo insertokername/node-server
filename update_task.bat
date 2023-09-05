@@ -1,8 +1,8 @@
-rem @echo off
+@echo off
 
-set TaskName=PYTHON_STREAM-take-ss
+set TaskName=PYTHON_AFK-start
 set BatchDir=%~dp0
-set BatFile=hidden_local_ss.vbs
+set BatFile=start_script.bat
 
 rem Check if the task exists and delete it if it does
 schtasks /query /TN "%TaskName%" 2>nul
