@@ -29,12 +29,18 @@ server.on("connection", (socket) => {
     console.log("A socket has initialized a connection!");
 
     socket.on("message", (str_message) => {
-        console.log("Received message:", str_message.toString());
+        console.log("Received message:");
         //connectedSockets.forEach((name,socket) => {
         //    console.log(name)
         //});
         try {
             message = JSON.parse(str_message);
+            if (message.command != "photo") {
+                console.log(str_message.toString())
+            }
+            else {
+                console.log("photo from client to all users")
+            }
             //str_message2=JSON.stringify(message)
             //console.log("str_message2"==="str_message2")
             if (message.from == "client" || message.password == "123") {

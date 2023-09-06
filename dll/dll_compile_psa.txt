@@ -1,0 +1,12 @@
+so i did: objdump -p test.dll | findstr "DLL Name:"
+so i go this output:
+    DLL Name: libgcc_s_seh-1.dll
+    DLL Name: GDI32.dll
+    DLL Name: gdiplus.dll
+    DLL Name: KERNEL32.dll
+    DLL Name: msvcrt.dll
+    DLL Name: ole32.dll
+    DLL Name: USER32.dll
+    DLL Name: libstdc++-6.dll
+
+and after that i copied all of the dlls from system32 and mingw64 and it finally worked

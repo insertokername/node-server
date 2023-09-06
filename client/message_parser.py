@@ -1,8 +1,10 @@
 import pyautogui
 import json
+import screenshot
 
 import base64
 from io import BytesIO
+
 
 def respond(str_message:str)->str:
     try:
@@ -10,8 +12,13 @@ def respond(str_message:str)->str:
         command="log"
         if(message["command"]=="screenshot"):
             command="photo"
+        output_message =json.dumps( {"from":"client","to":"user","command":f"{command}","text":f"{parse_string(message)}"}) 
+        if(message["command"]!="screenshot"):
+            print("answerd: \n"+output_message)
+        else:
+            print(json.dumps({"from":"client","to":"user","command":f"{command}","text":"<base64_image_here>"}))
+        return (output_message)
 
-        return (json.dumps( {"from":"client","to":"user","command":f"{command}","text":f"{parse_string(message)}"}))
     except Exception as e:
         print(f"ERROR PARSING MESSAGE \"{message} \": {e}")
         return(f"ERROR PARSING MESSAGE \"{message} \": {e}")
@@ -27,7 +34,7 @@ def parse_string(message ) -> str:
             print(f"pyautogui move-to error:{e}")
             return(f"pyautogui move-to error:{e}")
     elif(message["command"]=="screenshot"):
-        photo = pyautogui.screenshot()
+        """photo = pyautogui.screenshot()
         photo=photo.resize((640,360))
         photo.save("ss.jpeg")
         output = BytesIO()
@@ -35,7 +42,8 @@ def parse_string(message ) -> str:
         im_data = output.getvalue()
 
         image_data = base64.b64encode(im_data).decode('utf-8')
-        return(image_data)
+        return(image_data)"""
+        return(screenshot.screenshot(720,480))
     else:
         return(f"User passed invalid command!")
 

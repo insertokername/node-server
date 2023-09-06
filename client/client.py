@@ -5,8 +5,7 @@ import json
 def on_message(ws, message):
 
     print(f"Received message: {message}")
-    return_msg =message_parser.respond(message) 
-    print("answerd"+return_msg)
+    return_msg = message_parser.respond(message) 
     ws.send(return_msg )
     
 
