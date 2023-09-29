@@ -183,12 +183,11 @@ std::string gdiscreen(int width, int height) {
 
         int out_size = ((mem_vect.size() + 2) / 3) * 4 + 3;
         output_string.resize(out_size);
-        std::cout << "passed";
 
 
         int len = ToBase64Fast(mem_vect, output_string);
 
-        std::cout << "len is: " << len;
+        std::cout << "passed len is: " << len;
 
         bitmap->Save(L"screen.jpeg", &clsid, NULL); // To save the jpeg to a file
         bitmap->Save(istream, &clsid, NULL);
@@ -209,11 +208,15 @@ std::string gdiscreen(int width, int height) {
     GdiplusShutdown(gdiplusToken);
     return(output_string);
 }
-/*
-int main() {
+
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        return 1;
+    }
     std::ofstream ofile("out.txt");
 
-    ofile << gdiscreen(1920, 1080);
+    ofile << gdiscreen(std::stoi(argv[1]), std::stoi(argv[2]));
+    ofile.close();
 }
 /*
 int main() {
